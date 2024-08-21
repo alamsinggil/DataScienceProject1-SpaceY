@@ -19,7 +19,9 @@ app.layout = html.Div(children=[
     html.H1('SpaceX Launch Records Dashboard',
             style={'textAlign': 'center', 'color': '#503D36', 'font-size': 40}),
     
-    # Dropdown untuk Launch Sites
+    # TASK 1: Add a dropdown list to enable Launch Site selection
+    # The default select value is for ALL sites
+
     dcc.Dropdown(id='site-dropdown',
                  options=[
                      {'label': 'All Sites', 'value': 'ALL'},
@@ -34,13 +36,13 @@ app.layout = html.Div(children=[
                  ),
     html.Br(),
 
-    # Pie chart untuk menunjukkan total sukses launches
+    #   TASK 2: Add a pie chart to show the total successful launches count for all sites
     html.Div(dcc.Graph(id='success-pie-chart')),
     html.Br(),
 
     html.P("Payload range (Kg):"),
     
-    # Slider untuk memilih payload range
+    # TASK 3: Add a slider to select payload range
     dcc.RangeSlider(id='payload-slider',
                     min=min_payload, max=max_payload, step=1000,
                     marks={i: f'{i}' for i in range(int(min_payload), int(max_payload)+1000, 1000)},
@@ -48,11 +50,11 @@ app.layout = html.Div(children=[
                     ),
     html.Br(),
     
-    # Scatter chart untuk menunjukkan korelasi antara payload dan sukses launch
+    #  TASK 4: scatter chart
     html.Div(dcc.Graph(id='success-payload-scatter-chart')),
 ])
 
-# Callback untuk `site-dropdown` sebagai input, `success-pie-chart` sebagai output
+# TASK 2: Add a callback function for `site-dropdown` as input, `success-pie-chart` as output
 @app.callback(Output(component_id='success-pie-chart', component_property='figure'),
               Input(component_id='site-dropdown', component_property='value'))
 def get_pie_chart(entered_site):
@@ -70,7 +72,8 @@ def get_pie_chart(entered_site):
                      title=f'Total Success Launches for site {entered_site}')
         return fig
 
-# Callback untuk `site-dropdown` dan `payload-slider` sebagai input, `success-payload-scatter-chart` sebagai output
+# TASK 4: Add a callback function for `site-dropdown` and `payload-slider` as inputs, `success-payload-scatter-chart` as output
+# Add a scatter chart to show the correlation between payload and launch success
 @app.callback(
     Output(component_id='success-payload-scatter-chart', component_property='figure'),
     [Input(component_id='site-dropdown', component_property='value'),
@@ -96,6 +99,6 @@ def update_scatter_chart(selected_site, selected_payload):
         )
     return fig
 
-# Jalankan aplikasi
+# run
 if __name__ == '__main__':
     app.run_server(port=8051)
